@@ -1,7 +1,7 @@
-import 'package:clima/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:clima/services/networking.dart';
-import 'location.dart';
+import '../services/location.dart';
+import 'package:clima/utilities/access_env.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -18,6 +18,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   void getLocationData() async {
+    AccessEnv acc = AccessEnv();
+    acc.accessEnvData();
+    var apiKey = acc.apiKey;
+    var urlHeader = acc.apiUrlHeader;
+
     GetLocationDetails location = GetLocationDetails();
     await location.getCurrentLocation();
 
@@ -29,7 +34,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
     NetworkHelper networkHelper = NetworkHelper(url);
 
     var weatherData = await networkHelper.getData();
-    print(weatherData);
+
+    String cityName = weatherData['name'];
+
+    print('---------------');
+    print(cityName);
+    print('---------------');
   }
 
   @override
