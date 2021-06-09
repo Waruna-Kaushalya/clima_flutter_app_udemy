@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
 
 class LocationScreen extends StatefulWidget {
+  static const routeName = '/locationScreen';
   @override
   _LocationScreenState createState() => _LocationScreenState();
 }
@@ -9,6 +10,17 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context).settings.arguments as ScreenArguments;
+
+    var tweatherDataMap = args.weatherData;
+
+    double temperature = tweatherDataMap['main']['temp'];
+    String cityName = tweatherDataMap['name'];
+    int condition = tweatherDataMap['weather'][0]['id'];
+    print(temperature);
+    print(cityName);
+    print(condition);
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -49,7 +61,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      '32°',
+                      temperature.toString(),
                       style: kTempTextStyle,
                     ),
                     Text(
@@ -62,7 +74,7 @@ class _LocationScreenState extends State<LocationScreen> {
               Padding(
                 padding: EdgeInsets.only(right: 15.0),
                 child: Text(
-                  "It's 🍦 time in San Francisco!",
+                  "It's 🍦 time in $cityName!",
                   textAlign: TextAlign.right,
                   style: kMessageTextStyle,
                 ),
@@ -73,6 +85,12 @@ class _LocationScreenState extends State<LocationScreen> {
       ),
     );
   }
+}
+
+class ScreenArguments {
+  final weatherData;
+
+  ScreenArguments(this.weatherData);
 }
 
 // double temperature = decodedData['main']['temp'];

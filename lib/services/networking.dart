@@ -6,9 +6,16 @@ class NetworkHelper {
   final String url;
 
   Future getData() async {
-    http.Response response = await http.get(Uri.parse(url));
+    http.Response response;
+    try {
+      response = await http.get(Uri.parse(url));
+    } catch (e) {
+      print(e);
+    }
 
-    if (response.statusCode == 200) {
+    if (response == null) {
+      print('network err');
+    } else if (response.statusCode == 200) {
       String data = response.body;
 
       var decodedData = jsonDecode(data);

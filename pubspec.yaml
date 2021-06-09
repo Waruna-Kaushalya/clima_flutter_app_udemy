@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_spinkit: ^4.1.2
   dotenv: ^3.0.0
   flutter_dotenv: ^5.0.0
   http: ^0.13.3
