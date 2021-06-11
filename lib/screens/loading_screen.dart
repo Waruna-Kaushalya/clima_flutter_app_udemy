@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:clima/screens/location_screen.dart';
-import 'package:clima/services/networking.dart';
-import '../services/location.dart';
-import 'package:clima/utilities/access_env.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:clima/services/weather.dart';
 
 class LoadingScreen extends StatefulWidget {
   static const routeName = '/loadingScreen';
@@ -12,32 +10,15 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  double latitude;
-  double longitude;
-  var apiKey;
-  var urlHeader;
   @override
   void initState() {
     super.initState();
-    // getEnvVaribles();
+
     getLocationData();
   }
 
   void getLocationData() async {
-    AccessEnv acc = AccessEnv();
-    acc.accessEnvData();
-
-    GetLocationDetails location = GetLocationDetails();
-    await location.getCurrentLocation();
-
-    var url =
-        '${acc.apiUrlHeader}${location.latitude}&lon=${location.longitude}&appid=${acc.apiKey}&units=metric';
-
-    NetworkHelper networkHelper = NetworkHelper(url);
-
-    var weatherData = await networkHelper.getData();
-
-    checkDataStatus(weatherData);
+    var weatherData = await WeatherModel().getLocationWeather();
 
     Navigator.push(
       context,
@@ -46,31 +27,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
                 locationWeather: weatherData,
               )),
     );
-
-    //TODO: state1
-    // Navigator.pushNamed(
-    //   context,
-    //   LocationScreen.routeName,
-    //   arguments: ScreenArguments(weatherData),
-    // );
-  }
-
-  // void getEnvVaribles() {
-  //   AccessEnv acc = AccessEnv();
-  //   acc.accessEnvData();
-  //   apiKey = acc.apiKey;
-  //   urlHeader = acc.apiUrlHeader;
-  // }
-
-  void checkDataStatus(var weatherData) {
-    try {
-      String cityName = weatherData['name'];
-      print('---------------');
-      print(cityName);
-      print('---------------');
-    } catch (e) {
-      print(e);
-    }
   }
 
   @override
