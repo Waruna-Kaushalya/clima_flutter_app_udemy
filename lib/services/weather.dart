@@ -3,14 +3,23 @@ import '../services/location.dart';
 import 'package:clima/utilities/access_env.dart';
 
 class WeatherModel {
+  AccessEnv acc = AccessEnv();
+  Future<dynamic> getCityWeather(String cityname) async {
+    acc.accessEnvData();
+    var url =
+        '${acc.apiUrlHeader}q= $cityname&appid=${acc.apiKey}&units=metric';
+    NetworkHelper networkHelper = NetworkHelper(url);
+    var weatherData = await networkHelper.getData();
+    return weatherData;
+  }
+
   Future<dynamic> getLocationWeather() async {
-    AccessEnv acc = AccessEnv();
     acc.accessEnvData();
     GetLocationDetails location = GetLocationDetails();
     await location.getCurrentLocation();
 
     var url =
-        '${acc.apiUrlHeader}${location.latitude}&lon=${location.longitude}&appid=${acc.apiKey}&units=metric';
+        '${acc.apiUrlHeader}lat=${location.latitude}&lon=${location.longitude}&appid=${acc.apiKey}&units=metric';
 
     NetworkHelper networkHelper = NetworkHelper(url);
 

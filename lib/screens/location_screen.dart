@@ -32,6 +32,15 @@ class _LocationScreenState extends State<LocationScreen> {
 
   void updateUI(dynamic weatherData) {
     setState(() {
+      if (weatherData == null) {
+        temperature = 0;
+        cityName = '';
+        condition = 0;
+        weatherIcon = 'Error';
+        weatherMessage = 'Unable to get weather data';
+        return;
+      }
+
       temperature = weatherData['main']['temp'];
       cityName = weatherData['name'];
       condition = weatherData['weather'][0]['id'];
@@ -70,7 +79,22 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      var typedCityName = await Navigator.pushNamed(
+                        context,
+                        CityScreen.routeName,
+                      );
+
+                      print('---------------');
+                      print(typedCityName);
+                      print('---------------');
+
+                      if (typedCityName != null) {
+                        var weatherData =
+                            await weatherModel.getCityWeather(typedCityName);
+                        updateUI(weatherData);
+                      }
+                    },
                     child: Icon(
                       Icons.location_city,
                       size: 50.0,
@@ -78,8 +102,8 @@ class _LocationScreenState extends State<LocationScreen> {
                   ),
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 15.0),
+              Expanded(
+                flex: 2,
                 child: Row(
                   children: <Widget>[
                     Text(
@@ -93,8 +117,8 @@ class _LocationScreenState extends State<LocationScreen> {
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(right: 15.0),
+              Expanded(
+                flex: 5,
                 child: Text(
                   "$weatherMessage in $cityName!",
                   textAlign: TextAlign.right,
