@@ -19,18 +19,19 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    getEnvVaribles();
+    // getEnvVaribles();
     getLocationData();
   }
 
   void getLocationData() async {
+    AccessEnv acc = AccessEnv();
+    acc.accessEnvData();
+
     GetLocationDetails location = GetLocationDetails();
     await location.getCurrentLocation();
 
-    longitude = location.longitude;
-    latitude = location.latitude;
-
-    var url = '$urlHeader$latitude&lon=$longitude&appid=$apiKey';
+    var url =
+        '${acc.apiUrlHeader}${location.latitude}&lon=${location.longitude}&appid=${acc.apiKey}&units=metric';
 
     NetworkHelper networkHelper = NetworkHelper(url);
 
@@ -38,30 +39,28 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
     checkDataStatus(weatherData);
 
-    // Navigator.pushNamed(context, '/second');
-
-    Navigator.pushNamed(
+    Navigator.push(
       context,
-      LocationScreen.routeName,
-      arguments: ScreenArguments(weatherData),
+      MaterialPageRoute(
+          builder: (context) => LocationScreen(
+                locationWeather: weatherData,
+              )),
     );
 
+    //TODO: state1
     // Navigator.pushNamed(
     //   context,
-    //   LoadingScreen.,
-    //   arguments: ScreenArguments(
-    //     'Extract Arguments Screen',
-    //     'This message is extracted in the build method.',
-    //   ),
+    //   LocationScreen.routeName,
+    //   arguments: ScreenArguments(weatherData),
     // );
   }
 
-  void getEnvVaribles() {
-    AccessEnv acc = AccessEnv();
-    acc.accessEnvData();
-    apiKey = acc.apiKey;
-    urlHeader = acc.apiUrlHeader;
-  }
+  // void getEnvVaribles() {
+  //   AccessEnv acc = AccessEnv();
+  //   acc.accessEnvData();
+  //   apiKey = acc.apiKey;
+  //   urlHeader = acc.apiUrlHeader;
+  // }
 
   void checkDataStatus(var weatherData) {
     try {

@@ -3,23 +3,41 @@ import 'package:clima/utilities/constants.dart';
 
 class LocationScreen extends StatefulWidget {
   static const routeName = '/locationScreen';
+
+  LocationScreen({this.locationWeather});
+  final locationWeather;
+
   @override
   _LocationScreenState createState() => _LocationScreenState();
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+  double temperature;
+  String cityName;
+  int condition;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // print(widget.locationWeather);
+    updateUI(widget.locationWeather);
+  }
+
+  void updateUI(dynamic weatherData) {
+    temperature = weatherData['main']['temp'];
+    cityName = weatherData['name'];
+    condition = weatherData['weather'][0]['id'];
+  }
+
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context).settings.arguments as ScreenArguments;
-
-    var tweatherDataMap = args.weatherData;
-
-    double temperature = tweatherDataMap['main']['temp'];
-    String cityName = tweatherDataMap['name'];
-    int condition = tweatherDataMap['weather'][0]['id'];
-    print(temperature);
-    print(cityName);
-    print(condition);
+    //TODO: state1
+    // final args = ModalRoute.of(context).settings.arguments as ScreenArguments;
+    // var tweatherDataMap = args.weatherData;
+    // double temperature = tweatherDataMap['main']['temp'];
+    // String cityName = tweatherDataMap['name'];
+    // int condition = tweatherDataMap['weather'][0]['id'];
 
     return Scaffold(
       body: Container(
@@ -27,8 +45,6 @@ class _LocationScreenState extends State<LocationScreen> {
           image: DecorationImage(
             image: AssetImage('images/location_background.jpg'),
             fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-                Colors.white.withOpacity(0.8), BlendMode.dstATop),
           ),
         ),
         constraints: BoxConstraints.expand(),
@@ -61,7 +77,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      temperature.toString(),
+                      '${temperature.toStringAsFixed(0)}°',
                       style: kTempTextStyle,
                     ),
                     Text(
@@ -87,11 +103,11 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 }
 
-class ScreenArguments {
-  final weatherData;
-
-  ScreenArguments(this.weatherData);
-}
+//TODO: state1
+// class ScreenArguments {
+//   final weatherData;
+//   ScreenArguments(this.weatherData);
+// }
 
 // double temperature = decodedData['main']['temp'];
 // String cityName = decodedData['name'];
