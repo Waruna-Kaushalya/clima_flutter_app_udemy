@@ -61,49 +61,51 @@ class _LocationScreenState extends State<LocationScreen> {
         ),
         constraints: BoxConstraints.expand(),
         child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: Stack(
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  TextButton(
-                    onPressed: () async {
-                      var weatherData = await weatherModel.getLocationWeather();
-                      updateUI(weatherData);
-                    },
-                    child: Icon(
-                      Icons.near_me,
-                      size: 50.0,
-                    ),
+              Positioned(
+                top: 20,
+                left: 10,
+                child: TextButton(
+                  onPressed: () async {
+                    var weatherData = await weatherModel.getLocationWeather();
+                    updateUI(weatherData);
+                  },
+                  child: Icon(
+                    Icons.near_me,
+                    size: 50.0,
                   ),
-                  TextButton(
-                    onPressed: () async {
-                      var typedCityName = await Navigator.pushNamed(
-                        context,
-                        CityScreen.routeName,
-                      );
-
-                      print('---------------');
-                      print(typedCityName);
-                      print('---------------');
-
-                      if (typedCityName != null) {
-                        var weatherData =
-                            await weatherModel.getCityWeather(typedCityName);
-                        updateUI(weatherData);
-                      }
-                    },
-                    child: Icon(
-                      Icons.location_city,
-                      size: 50.0,
-                    ),
-                  ),
-                ],
+                ),
               ),
-              Expanded(
-                flex: 2,
+              Positioned(
+                top: 20,
+                right: 10,
+                child: TextButton(
+                  onPressed: () async {
+                    var typedCityName = await Navigator.pushNamed(
+                      context,
+                      CityScreen.routeName,
+                    );
+
+                    print('---------------');
+                    print(typedCityName);
+                    print('---------------');
+
+                    if (typedCityName != null) {
+                      var weatherData =
+                          await weatherModel.getCityWeather(typedCityName);
+                      updateUI(weatherData);
+                    }
+                  },
+                  child: Icon(
+                    Icons.location_city,
+                    size: 50.0,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 100,
+                left: 25,
                 child: Row(
                   children: <Widget>[
                     Text(
@@ -117,8 +119,10 @@ class _LocationScreenState extends State<LocationScreen> {
                   ],
                 ),
               ),
-              Expanded(
-                flex: 5,
+              Positioned(
+                bottom: 20,
+                right: 10,
+                left: 10,
                 child: Text(
                   "$weatherMessage in $cityName!",
                   textAlign: TextAlign.right,
