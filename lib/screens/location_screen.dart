@@ -44,6 +44,7 @@ class _LocationScreenState extends State<LocationScreen> {
       temperature = weatherData['main']['temp'];
       cityName = weatherData['name'];
       condition = weatherData['weather'][0]['id'];
+
       weatherIcon = weatherModel.getWeatherIcon(condition);
       weatherMessage = weatherModel.getMessage(temperature.toInt());
     });
@@ -125,7 +126,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 left: 10,
                 child: Text(
                   "$weatherMessage in $cityName!",
-                  textAlign: TextAlign.right,
+                  // textAlign: TextAlign.right,
                   style: kMessageTextStyle,
                 ),
               ),
